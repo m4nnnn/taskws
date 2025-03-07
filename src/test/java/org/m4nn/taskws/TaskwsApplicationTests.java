@@ -1,13 +1,11 @@
 package org.m4nn.taskws;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class TaskwsApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
+class MyTest {
+    @Test
+    void sampleTest() {
+        assertEquals(2, 1 + 1);
+    }
 }
