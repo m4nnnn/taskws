@@ -1,6 +1,8 @@
 package org.m4nn.taskws.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.m4nn.taskws.model.Task;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,20 @@ public class TaskService {
         return tasks.get(id);
     } 
 
+    public List<Task> getTasks() {
+        return new ArrayList<>(tasks.values());
+    }
+
+
+    public Task updateTask(String id, Task task) {
+        if (tasks.containsKey(id)) {
+            tasks.put(id, task);
+            return task;
+        }
+        return null;
+    }
+
+
 
     public Task createTask(Task task) {
         var uid = java.util.UUID.randomUUID().toString();
@@ -28,6 +44,14 @@ public class TaskService {
         tasks.put(task.getId(), task);
 
         return task;
+    }
+
+    public boolean deleteTask(String id) {
+        if (tasks.containsKey(id)) {
+            tasks.remove(id);
+            return true;
+        }
+        return false;
     }
 
 

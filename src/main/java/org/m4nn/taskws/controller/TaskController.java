@@ -1,5 +1,7 @@
 package org.m4nn.taskws.controller;
 
+import java.util.List;
+
 import org.m4nn.taskws.model.Task;
 import org.m4nn.taskws.service.TaskService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody; 
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 @RestController
@@ -19,8 +22,12 @@ public class TaskController {
     this.taskService = taskService;
     }
 
+    @GetMapping
+    public List<Task> getTasks() {
+        return taskService.getTasks();
+    }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping("/{id}")
     public Task getTask(@PathVariable("id") String id) {
         return taskService.getTask(id);
     }
@@ -29,6 +36,13 @@ public class TaskController {
     public Task createTask(@RequestBody Task task) {
         return taskService.createTask(task);
     }
+
+    @DeleteMapping("/{id}") 
+    public boolean deleteTask(@PathVariable String id) {
+            return taskService.deleteTask(id);
+  
+    }
+
 
     /* 
       @Autowired
@@ -53,15 +67,7 @@ public class TaskController {
         return updatedTask.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}") 
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        try {
-            taskService.deleteTask(id);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    
 
     @PutMapping("/{id}/complete") 
     public ResponseEntity<Task> completeTask(@PathVariable Long id) {
