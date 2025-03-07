@@ -1,51 +1,50 @@
 package org.m4nn.taskws.service;
 
-import org.m4nn.taskws.model.*;
-import org.m4nn.taskws.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.HashMap;
 
-import java.util.List;
-import java.util.Optional;
+import org.m4nn.taskws.model.Task;
+//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TaskService {
+    
+    //@Autowired
+   // private TaskRepository taskRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
-
-    public List<Task> getAllTasks() {
+   /* public List<Task> getAllTasks() {
         return taskRepository.findAll();
-    }
+    } */
+    private HashMap<String, Task> tasks = new HashMap<String, Task>();
 
-    public Optional<Task> getTask(Long id) {
-        return taskRepository.findById(id);
-    }
+    public Task getTask(String id) {
+        return tasks.get(id);
+    } 
+
 
     public Task createTask(Task task) {
+        var uid = java.util.UUID.randomUUID().toString();
+        task.setId(uid);
+        tasks.put(task.getId(), task);
+
+        return task;
+    }
+
+
+    /*public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
+
+    public Task updateTask(Long id, Task task) {
+        if (!taskRepository.existsById(id)) {
+            return null;
+        }
+        task.setId(id);
         return taskRepository.save(task);
     }
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
-    }
+    } */
 
-    public Task updateTask(Long id, Task task) {
-        Optional<Task> existingTask = taskRepository.findById(id);
-        if (existingTask.isPresent()) {
-            task.setId(existingTask.get().getId());
-            return taskRepository.save(task);
-        }
-        return null;
-    }
-
-    public Task completeTask(Long id) {
-        Optional<Task> task = taskRepository.findById(id);
-        if (task.isPresent()) {
-            Task completedTask = task.get();
-            completedTask.setCompleted(true); // Assuming Task has a setCompleted method
-            return taskRepository.save(completedTask);
-        }
-        return null;
-    }
 }
